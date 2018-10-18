@@ -1,6 +1,7 @@
-var passport = require('passport');
+import * as passport from 'passport';
 import * as passportLocal from 'passport-local';
 import { UsersModel } from '../models';
+import { Users } from '../handlers';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -18,7 +19,7 @@ passport.use(
 				if (!user) {
 					done(null, false, { message: 'Incorrect credentials.' });
 				} else {
-					user.comparePassword(attemptedPassword, (isMatch: boolean) => {
+					Users.comparePassword(user, attemptedPassword).then((isMatch: boolean) => {
 						if (isMatch) {
 							done(null, user, { message: 'Successful Login' });
 						} else {

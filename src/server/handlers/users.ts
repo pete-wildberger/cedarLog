@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UsersModel, UsersModel_type } from '../models';
-
+import * as bcrypt from 'bcrypt';
 // export interface TicketsHandler_type {
 // 	tm: TicketsModel_type;
 // 	QRCode: any;
@@ -12,10 +12,19 @@ import { UsersModel, UsersModel_type } from '../models';
 
 class UsersHandler {
 	public um: UsersModel_type;
-	// public QRCode = QRCode;
-	// public md5 = Md5;
 	constructor() {
 		this.um = UsersModel;
+	}
+	comparePassword(user: { [key: string]: any }, passwordToCompare: string) {
+		return new Promise(resolve => {
+			bcrypt.compare(passwordToCompare, user.password, (err: any, match: boolean) => {
+				if (err) {
+					console.log('Error comparing password', err);
+					return resolve(false);
+				}
+				resolve(match);
+			});
+		});
 	}
 	isLoggedIn(req: Request, res: Response, next: NextFunction) {
 		if (req.isAuthenticated()) {
@@ -32,23 +41,29 @@ class UsersHandler {
 		});
 	}
 	register = (req: Request, res: Response) => {
-		let newUser = {
-			email: req.body.email,
-			password: req.body.password
-		};
-		this.um.single_insert(newUser).then(err => {
+		bcrypt.hash(req.body.password, process.env.SALT, (err, hash) => {
 			if (err) {
-				res.status(400).send(err);
-			} else {
-				req.login(newUser, err => {
-					if (err) {
-						console.log(err);
-						res.status(400).send('unable to authenticate.');
-					} else {
-						res.status(201).send(newUser);
-					}
-				});
+				console.log('Error hashing password', err);
+				res.status(400).send('unable to hash.');
 			}
+			const newUser = {
+				email: req.body.email,
+				password: hash
+			};
+			this.um.single_insert(newUser).then(err => {
+				if (err) {
+					res.status(400).send(err);
+				} else {
+					req.login(newUser, err => {
+						if (err) {
+							console.log(err);
+							res.status(400).send('unable to authenticate.');
+						} else {
+							res.status(201).send(newUser);
+						}
+					});
+				}
+			});
 		});
 	};
 }

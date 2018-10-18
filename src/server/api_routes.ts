@@ -14,7 +14,7 @@ class Router {
 		this.api.use(bodyParser.json());
 	}
 	private routes() {
-		this.api.route('/tickets').get(Tickets.all);
+		// this.api.route('/tickets').get(Tickets.all);
 	}
 }
 export default new Router().api;

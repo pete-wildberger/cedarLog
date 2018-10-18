@@ -13,8 +13,7 @@ class Users extends Model<model_type> {
 	}
 	find_by_email(email: string) {
 		const query: string = `SELECT * FROM users WHERE email = $1`;
-		const params: string = email;
-		return this.request(query, [params]);
+		return this.request(query, [email]);
 	}
 }
 export const UsersModel = new Users(pool, 'users');
