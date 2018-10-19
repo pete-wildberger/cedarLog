@@ -6,7 +6,7 @@ import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
-import { Users } from './handlers/';
+import { Users, Events } from './handlers/';
 import api_routes from './api_routes';
 
 class App {
@@ -47,6 +47,7 @@ class App {
 		});
 
 		this.express.use('/api', Users.isLoggedIn, api_routes);
+		this.express.get('/events', Events.events);
 		this.express.get('/', (req: express.Request, res: express.Response) => {
 			res.sendFile(path.join(__dirname, 'index.html'));
 		});

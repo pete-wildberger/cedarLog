@@ -1,7 +1,6 @@
 import * as express from 'express';
-import * as path from 'path';
 import * as bodyParser from 'body-parser';
-import { Tickets, Users } from './handlers/';
+import { Events, Tickets, Users } from './handlers/';
 
 class Router {
 	public api: express.Router;
@@ -14,7 +13,7 @@ class Router {
 		this.api.use(bodyParser.json());
 	}
 	private routes() {
-		// this.api.route('/tickets').get(Tickets.all);
+		this.api.route('/scrape').get(Events.events);
 	}
 }
 export default new Router().api;
