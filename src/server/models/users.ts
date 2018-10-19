@@ -1,5 +1,5 @@
 import * as pg from 'pg';
-import { Model, model_type } from './model.class';
+import { Model, model_type } from './lib/model.class';
 import { pool } from './connection';
 
 export interface UsersModel_type extends Model<model_type> {

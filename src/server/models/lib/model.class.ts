@@ -28,8 +28,10 @@ export class Model<model_type> {
 				client.query(sql_query, params, (err, result) => {
 					done();
 					if (err) {
+						console.log('err', err);
 						reject(err);
 					}
+					console.log('result', result);
 					resolve(result.rows);
 				});
 			});
@@ -73,7 +75,6 @@ export class Model<model_type> {
 		});
 	};
 	bulk_insert = (entries: any[]): any => {
-		console.log('hit');
 		const props: string[] = Object.keys(entries[0]);
 		let count: number = 1;
 		let values: any[] = [];

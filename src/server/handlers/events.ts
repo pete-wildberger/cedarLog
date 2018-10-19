@@ -11,16 +11,16 @@ import { getEvents } from '../scraper/scraper';
 // }
 
 class EventsHandler {
-  public um: UsersModel_type;
-  constructor() {
-    this.um = UsersModel;
-  }
-  events(req: Request, res: Response) {
-    getEvents((data: any) => {
-      EventsModel.bulk_insert(data);
-      console.log(data);
-      res.status(200).send(data);
-    });
-  }
+	public um: UsersModel_type;
+	constructor() {
+		this.um = UsersModel;
+	}
+	events(req: Request, res: Response) {
+		getEvents((data: any) => {
+			EventsModel.upsert(data);
+			console.log(data);
+			res.status(200).send(data);
+		});
+	}
 }
 export const Events = new EventsHandler();
