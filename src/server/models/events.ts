@@ -11,6 +11,7 @@ class Events extends Model<model_type> {
 		super(pool, table);
 		this.table = table;
 	}
+
 	upsert(entries: Array<{ [key: string]: string }>): Promise<any> {
 		const props: string[] = Object.keys(entries[0]);
 		let count: number = 1;
