@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-const Footer = (props: any) => {
+export const Footer = (props: any) => {
   return <div className="foot" />;
 };
-
-export default Footer;
