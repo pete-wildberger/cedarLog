@@ -8,68 +8,72 @@ import { DashBoard, Login, PrivateRoute, Register, User } from './components/';
 const FourOhFour = () => <h1>Oh no 404</h1>;
 
 interface AppState {
-	user: { [key: string]: any };
-	email_input: string;
-	password_input_one: string;
-	password_input_two: string;
+  user: { [key: string]: any };
+  email_input: string;
+  password_input_one: string;
+  password_input_two: string;
 }
 
 class App extends React.Component<AppState> {
-	public state: AppState;
-	constructor(props: any) {
-		super(props);
-		this.state = {
-			user: {},
-			email_input: '',
-			password_input_one: '',
-			password_input_two: ''
-		};
-	}
-	getUser = () => {
-		let user;
-		this.setState({ user });
-	};
-	handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
-		this.setState({
-			[e.target.name]: e.target.value
-		});
-	};
-	login = e => {
-		e.preventDefault();
-		const creds = {
-			email: this.state.email_input,
-			password: this.state.password_input_one
-		};
-		axios
-			.post('/login', creds)
-			.then(res => {
-				console.log(res);
-			})
-			.catch(err => {
-				console.log(err);
-			});
-	};
-	render() {
-		let outlet: JSX.Element = (
-			<Register
-				email_input={this.state.email_input}
-				password_input_one={this.state.password_input_one}
-				password_input_two={this.state.password_input_two}
-				handleInputChange={e => this.handleInputChange(e)}
-			/>
-		);
-		return (
-			<BrowserRouter>
-				<div>
-					<Switch>
-						{outlet}
-						<Route exact path="/" component={DashBoard} />
-						<Route path="/:user" component={User} />
-						<Route component={FourOhFour} />
-					</Switch>
-				</div>
-			</BrowserRouter>
-		);
-	}
+  public state: AppState;
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      user: {},
+      email_input: '',
+      password_input_one: '',
+      password_input_two: ''
+    };
+  }
+  getUser = () => {
+    let user;
+    this.setState({ user });
+  };
+  handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+  login = e => {
+    e.preventDefault();
+    const creds = {
+      email: this.state.email_input,
+      password: this.state.password_input_one
+    };
+    axios
+      .post('/login', creds)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  render() {
+    let outlet: JSX.Element = (
+      <Register
+        email_input={this.state.email_input}
+        password_input_one={this.state.password_input_one}
+        password_input_two={this.state.password_input_two}
+        handleInputChange={e => this.handleInputChange(e)}
+        handleRegister={e => this.handleRegister(e)}
+      />
+    );
+    return (
+      <BrowserRouter>
+        <div>
+          {outlet}
+          <Route exact path="/" component={DashBoard} />
+          <Route path="/:user" component={User} />
+          <Switch>
+            <Route component={FourOhFour} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 export default App;
