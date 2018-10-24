@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
 import { Users, Events } from './handlers/';
+import { PassportInit } from './auth/passport';
 import api_routes from './api_routes';
 
 class App {
@@ -17,6 +18,7 @@ class App {
 		this.routes();
 	}
 	private middleware(): void {
+		PassportInit();
 		this.express.use(cookieParser());
 		this.express.use(compression());
 		this.express.use(helmet());

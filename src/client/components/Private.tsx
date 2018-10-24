@@ -1,6 +1,30 @@
 import * as React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteComponentProps, RouteProps } from 'react-router-dom';
 
-export const PrivateRoute = ({ component: Component, auth, ...rest }) => (
-  <Route {...rest} render={props => (auth.isAuthenticated === true ? <Component {...props} /> : <Redirect to="/" />)} />
-);
+type RouteComponent = React.StatelessComponent<RouteComponentProps<{}>> | React.ComponentClass<any>;
+interface RoutePropsAuth extends RouteProps {
+	auth?: boolean;
+}
+
+export const PrivateRoute: React.StatelessComponent<RoutePropsAuth> = ({ component, ...rest }) => {
+	const renderFn = (Component?: RouteComponent) => (props: RoutePropsAuth) => {
+		if (!Component) {
+			return null;
+		}
+
+		if (props.auth) {
+			return <Component {...props} />;
+		}
+
+		const redirectProps = {
+			to: {
+				pathname: '/',
+				state: { from: props.location }
+			}
+		};
+
+		return <Redirect {...redirectProps} />;
+	};
+
+	return <Route {...rest} render={renderFn(component)} />;
+};

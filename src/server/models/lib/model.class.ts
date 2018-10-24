@@ -31,7 +31,6 @@ export class Model<model_type> {
 						console.log('err', err);
 						reject(err);
 					}
-					console.log('result', result);
 					resolve(result.rows);
 				});
 			});
@@ -57,18 +56,20 @@ export class Model<model_type> {
 		});
 	};
 
-	find_by_id = (id: number): Promise<any> => {
+	find_by_id = (_id: number): Promise<any> => {
 		return new Promise((resolve, reject) => {
 			this.pool.connect((err, client, done) => {
 				if (err) {
 					done();
 					return reject(err);
 				}
-				client.query('SELECT * FROM $1 WHERE id=$2', [this.table, id], (err, result) => {
+				console.log('this.table, _id', this.table, _id);
+				client.query('SELECT * FROM $1 WHERE _id=$2', [this.table, _id], (err, result) => {
 					done();
 					if (err) {
 						reject(err);
 					}
+					console.log(result);
 					resolve(result.rows);
 				});
 			});
@@ -89,7 +90,6 @@ export class Model<model_type> {
 			inserts.push(`(${blings.join(',')})`);
 		});
 		const db_query = `INSERT INTO ${this.table} (${props.join(',')}) VALUES ${inserts.join(',')} RETURNING *`;
-		console.log(db_query);
 		return new Promise((resolve, reject) => {
 			this.pool.connect((err, client, done) => {
 				if (err) {
@@ -129,7 +129,7 @@ export class Model<model_type> {
 					if (err) {
 						reject(err);
 					}
-					resolve(result);
+					resolve(result.rows[0]);
 				});
 			});
 		});
