@@ -16,13 +16,12 @@ export const PassportInit = (): void => {
 			(req, email, attemptedPassword, done) => {
 				// find user document
 				UsersModel.find_by_email(email).then((user: any) => {
-					console.log('user', user);
 					if (!user) {
 						done(null, false, { message: 'Incorrect credentials.' });
 					} else {
-						Users.comparePassword(user, attemptedPassword).then((isMatch: boolean) => {
+						Users.comparePassword(user[0], attemptedPassword).then((isMatch: boolean) => {
 							if (isMatch) {
-								done(null, user, { message: 'Successful Login' });
+								done(null, user[0], { message: 'Successful Login' });
 							} else {
 								done(null, false, { message: 'Incorrect credentials.' });
 							}

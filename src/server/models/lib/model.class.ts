@@ -64,13 +64,13 @@ export class Model<model_type> {
 					return reject(err);
 				}
 				console.log('this.table, _id', this.table, _id);
-				client.query('SELECT * FROM $1 WHERE _id=$2', [this.table, _id], (err, result) => {
+				client.query(`SELECT * FROM ${this.table} WHERE _id=$1`, [_id], (err, result) => {
 					done();
 					if (err) {
 						reject(err);
 					}
-					console.log(result);
-					resolve(result.rows);
+					console.log(err, result);
+					resolve(result.rows[0]);
 				});
 			});
 		});

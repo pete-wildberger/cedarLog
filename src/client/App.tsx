@@ -20,13 +20,22 @@ export class App extends React.Component<AppProps, AppState> {
 	constructor(props: AppProps) {
 		super(props);
 		this.state = {
-			user: {},
+			user: {
+				email: ''
+			},
 			email_input: '',
 			login: true,
 			password_input_one: '',
 			password_input_two: ''
 		};
 	}
+	clearLoginState = (): void => {
+		this.setState({
+			email_input: '',
+			password_input_one: '',
+			password_input_two: ''
+		});
+	};
 	getUser = () => {
 		let user;
 		this.setState({ user });
@@ -39,20 +48,27 @@ export class App extends React.Component<AppProps, AppState> {
 	};
 	handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const creds = {
-			email: this.state.email_input,
-			password: this.state.password_input_one
-		};
-		axios
-			.post('/register', creds)
-			.then(user => {
-				console.log(user);
-				this.setState({ user });
-				this.toggleLogin();
-			})
-			.catch(err => {
-				console.log(err);
-			});
+		if (this.state.password_input_one !== this.state.password_input_two) {
+			this.clearLoginState();
+			return;
+		} else {
+			const creds = {
+				email: this.state.email_input,
+				password: this.state.password_input_one
+			};
+			axios
+				.post('/register', creds)
+				.then(res => {
+					console.log(res);
+					this.setState({ user: res.data });
+					console.log(this.state);
+					this.toggleLogin();
+				})
+				.catch(err => {
+					console.log(err);
+				});
+			this.clearLoginState();
+		}
 	};
 	login = (e: React.SyntheticEvent) => {
 		e.preventDefault();
@@ -64,11 +80,14 @@ export class App extends React.Component<AppProps, AppState> {
 			.post('/login', creds)
 			.then(res => {
 				console.log(res);
+				this.setState({ user: res.data });
+				console.log(this.state);
 				history.push('/dashboard');
 			})
 			.catch(err => {
 				console.log(err);
 			});
+		this.clearLoginState();
 	};
 	toggleLogin = () => {
 		this.setState({
@@ -76,8 +95,9 @@ export class App extends React.Component<AppProps, AppState> {
 		});
 	};
 	render() {
+		console.log('email', this.state.user.email.length);
 		let outlet: JSX.Element;
-		if (this.state.login && !this.state.user.email) {
+		if (this.state.login && this.state.user.email.length === 0) {
 			outlet = (
 				<Login
 					email_input={this.state.email_input}
@@ -87,7 +107,7 @@ export class App extends React.Component<AppProps, AppState> {
 					toggleLogin={() => this.toggleLogin()}
 				/>
 			);
-		} else {
+		} else if (!this.state.login && this.state.user.email.length === 0) {
 			outlet = (
 				<Register
 					email_input={this.state.email_input}
@@ -97,6 +117,8 @@ export class App extends React.Component<AppProps, AppState> {
 					handleRegister={e => this.handleRegister(e)}
 				/>
 			);
+		} else {
+			outlet = <span />;
 		}
 
 		return (
