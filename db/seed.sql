@@ -36,8 +36,8 @@ CREATE UNIQUE INDEX shifts_pkey ON shifts(_id int4_ops);
 
 CREATE TABLE users (
     _id SERIAL PRIMARY KEY,
-    first_name character varying(24) NOT NULL,
-    last_name character varying(60) NOT NULL,
+    first_name character varying(24),
+    last_name character varying(60),
     email character varying(60) NOT NULL UNIQUE,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     password character varying(60) NOT NULL,

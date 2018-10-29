@@ -1,30 +1,41 @@
-import * as React from 'react';
-import { Route, Redirect, RouteComponentProps, RouteProps } from 'react-router-dom';
+import * as React from "react";
+import {
+  Route,
+  Redirect,
+  RouteComponentProps,
+  RouteProps
+} from "react-router-dom";
 
-type RouteComponent = React.StatelessComponent<RouteComponentProps<{}>> | React.ComponentClass<any>;
+type RouteComponent =
+  | React.StatelessComponent<RouteComponentProps<{}>>
+  | React.ComponentClass<any>;
 interface RoutePropsAuth extends RouteProps {
-	auth?: boolean;
+  auth?: boolean;
 }
 
-export const PrivateRoute: React.StatelessComponent<RoutePropsAuth> = ({ component, ...rest }) => {
-	const renderFn = (Component?: RouteComponent) => (props: RoutePropsAuth) => {
-		if (!Component) {
-			return null;
-		}
+export const PrivateRoute: React.StatelessComponent<RoutePropsAuth> = ({
+  component,
+  ...rest
+}) => {
+  const renderFn = (Component?: RouteComponent) => (props: RoutePropsAuth) => {
+    if (!Component) {
+      return null;
+    }
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    console.log(user);
+    if (user.auth) {
+      return <Component {...props} />;
+    }
 
-		if (props.auth) {
-			return <Component {...props} />;
-		}
+    const redirectProps = {
+      to: {
+        pathname: "/",
+        state: { from: props.location }
+      }
+    };
 
-		const redirectProps = {
-			to: {
-				pathname: '/',
-				state: { from: props.location }
-			}
-		};
+    return <Redirect {...redirectProps} />;
+  };
 
-		return <Redirect {...redirectProps} />;
-	};
-
-	return <Route {...rest} render={renderFn(component)} />;
+  return <Route {...rest} render={renderFn(component)} />;
 };
