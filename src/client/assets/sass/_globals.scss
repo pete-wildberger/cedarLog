@@ -1,11 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin');
 $yellow: #ffb70f;
 $grey: #949494;
 $black: #212121;
 $green: #3d9991;
 
-.login {
-	box-shadow: 5px 10px #888888;
+body {
+  font-family: 'Cabin', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  font-size: 1em !important;
 }
-.vert {
-	align-items: center;
+input {
+  font-family: 'Cabin', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  font-size: 1.5em !important;
+}
+button {
+  font-family: 'Cabin', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  font-size: 1.5em !important;
 }

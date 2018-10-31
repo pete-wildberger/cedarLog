@@ -22,8 +22,7 @@ export const PrivateRoute: React.StatelessComponent<RoutePropsAuth> = ({
       return null;
     }
     const user = JSON.parse(sessionStorage.getItem("user"));
-    console.log(user);
-    if (user.auth) {
+    if (user !== null && user.auth) {
       return <Component {...props} />;
     }
 

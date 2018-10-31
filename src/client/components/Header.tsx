@@ -1,17 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 
-const Header = (props: any) => {
+export const Header = () => {
   return (
     <div className="head">
-      <div className="col-9 bottom">
-        <div className="pushdown">
-          <h1 className="center">West Bank Events</h1>
-          <h2 className="center">Cedar | Palmer's | Nomad | Acadia</h2>
-          <p className="center">Live Music in the Cedar/Riverside neighborhood of Minneapolis</p>
-        </div>
-      </div>
+      <img className="logo" src="./assets/img/CedarLogo.png" alt="Cedar Logo" />
     </div>
   );
 };
-
-export default Header;

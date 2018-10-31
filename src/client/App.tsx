@@ -1,20 +1,21 @@
 import * as React from "react";
-import {
-  BrowserRouter,
-  Link,
-  withRouter,
-  Route,
-  Switch
-} from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
-// import history from "./history";
-import { DashBoard, Login, PrivateRoute, Register, User } from "./components/";
+import history from "./history";
+import {
+  DashBoard,
+  Footer,
+  Header,
+  Login,
+  PrivateRoute,
+  Register,
+  User
+} from "./components/";
 // https://tylermcginnis.com/react-router-protected-routes-authentication/
 
 const FourOhFour = () => {
   return <h1>Oh no 404</h1>;
 };
-interface AppProps {}
 
 interface AppState {
   user?: { [key: string]: any };
@@ -25,9 +26,8 @@ interface AppState {
   password_input_two?: string;
 }
 
-export class App extends React.Component {
-  state: AppState;
-  constructor(props) {
+export class App extends React.Component<any, AppState> {
+  constructor(props: any) {
     super(props);
     this.state = {
       user: {
@@ -93,10 +93,10 @@ export class App extends React.Component {
         console.log(res);
         if (res.data.email.length > 0 && res.data._id > -1) {
           this.setState({ user: res.data, auth: true });
+          console.log(this.props);
           console.log(this.state);
-          console.log(history);
           sessionStorage.setItem("user", JSON.stringify(this.state.user));
-          this.props.history.push("/dashboard");
+          history.push("/dashboard");
         }
       })
       .catch(err => {
@@ -141,21 +141,24 @@ export class App extends React.Component {
     }
 
     return (
-      <BrowserRouter>
-        <div className="row">
-          <div className="col-12">{outlet}</div>
-          <Switch>
-            <PrivateRoute
-              exact
-              path="/dashboard"
-              auth={this.state.auth}
-              component={DashBoard}
-            />
-            <PrivateRoute path="/:user" component={User} />
-          </Switch>
-          <Route component={FourOhFour} />
+      <Router history={history}>
+        <div className="App">
+          <Header />
+          <div className="row view">
+            <div className="col-12">{outlet}</div>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/dashboard"
+                auth={this.state.auth}
+                component={DashBoard}
+              />
+              <PrivateRoute path="/:user" component={User} />
+            </Switch>
+          </div>
+          <Footer />
         </div>
-      </BrowserRouter>
+      </Router>
     );
   }
 }
