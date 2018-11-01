@@ -1,9 +1,10 @@
 import * as React from "react";
+import { SVG } from "./Logo";
 
 export const Header = () => {
   return (
     <div className="head">
-      <img className="logo" src="./assets/img/CedarLogo.png" alt="Cedar Logo" />
+      <SVG className="logo" name="logo" fill="#fff" />
     </div>
   );
 };
