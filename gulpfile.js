@@ -1,61 +1,54 @@
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const browserify = require('browserify');
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
-const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
-const tsify = require('tsify');
-const uglify = require('gulp-uglify-es').default;
-const del = require('del');
-const paths = {
-  pages: ['src/client/*.html']
-};
+const gulp = require("gulp");
+const sass = require("gulp-sass");
+const ts = require("gulp-typescript");
+const tsProject = ts.createProject("tsconfig.json");
+const seq = require("gulp-sequence");
+const del = require("del");
 
-gulp.task('clean', done => {
-  del.sync(['dist/*']);
+gulp.task("clean", done => {
+  del.sync(["dist/*"]);
   done();
 });
-gulp.task('dist:assets:img', () => {
-  return gulp.src('src/client/assets/img/**/*').pipe(gulp.dest('dist/assets/img'));
+gulp.task("dist:assets:img", () => {
+  return gulp.src("src/client/assets/img/**/*").pipe(gulp.dest("dist/assets/img"));
 });
 
-gulp.task('sass', () => {
+gulp.task("sass", () => {
   return gulp
-    .src('src/client/assets/sass/*.scss')
-    .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-    .pipe(gulp.dest('dist/assets/css'));
+    .src("src/client/assets/sass/*.scss")
+    .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
+    .pipe(gulp.dest("dist/assets/css"));
 });
 
-gulp.task('copy-html', () => {
-  return gulp.src(paths.pages).pipe(gulp.dest('dist'));
-});
-
-gulp.task('server', () => {
+gulp.task("server", () => {
   return tsProject
     .src()
     .pipe(tsProject())
-    .js.pipe(gulp.dest('dist'));
+    .js.pipe(gulp.dest("dist"));
 });
 
-gulp.task('default', ['clean', 'copy-html', 'sass', 'dist:assets:img', 'server'], () => {
-  return (
-    browserify({
-      basedir: '.',
-      debug: true,
-      entries: ['src/client/index.tsx'],
-      cache: {},
-      packageCache: {}
-    })
-      .plugin(tsify)
-      .bundle()
-      .pipe(source('bundle.js'))
-      // .pipe(buffer())
-      // .pipe(uglify({ output: { ascii_only: true } }))
-      .pipe(gulp.dest('dist'))
-  );
+gulp.task("dist:webpack:dev", done => {
+  const { exec } = require("child_process");
+  exec("webpack --config-name dev", (err, stdout, stderr) => {
+    console.log("\x1b[32m", stdout);
+    console.log("\x1b[41m%s\x1b[0m", stderr);
+    done(err);
+  });
 });
 
-gulp.task('sass:watch', () => {
-  gulp.watch('src/client/assets/sass/*.scss', ['sass']);
+gulp.task("dist:webpack:prod", done => {
+  // const { execFile } = require("child_process");
+  const { exec } = require("child_process");
+  exec("webpack --config-name prod", (err, stdout, stderr) => {
+    console.log("\x1b[34m", stdout);
+    console.log("\x1b[41m%s\x1b[0m", stderr);
+    done(err);
+  });
+});
+
+gulp.task("build", seq(["clean", "sass", "dist:assets:img", "server"], "dist:webpack:prod"));
+gulp.task("build:dev", seq(["clean", "sass", "dist:assets:img", "server"], "dist:webpack:dev"));
+
+gulp.task("sass:watch", () => {
+  gulp.watch("src/client/assets/sass/*.scss", ["sass"]);
 });
