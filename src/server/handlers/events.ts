@@ -10,12 +10,8 @@ import { getEvents } from '../scraper/scraper';
 // 	create_many(req: Request, res: Response): any;
 // }
 
-class EventsHandler {
-	public um: UsersModel_type;
-	constructor() {
-		this.um = UsersModel;
-	}
-	events(req: Request, res: Response) {
+export class Events {
+	static events(req: Request, res: Response) {
 		getEvents((data: any) => {
 			EventsModel.upsert(data);
 			console.log(data);
@@ -23,4 +19,3 @@ class EventsHandler {
 		});
 	}
 }
-export const Events = new EventsHandler();

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Router, Route, Switch } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import { dug } from './dug';
 import history from "./history";
 import {
   DashBoard,
@@ -67,11 +68,11 @@ export class App extends React.Component<any, AppState> {
         email: this.state.email_input,
         password: this.state.password_input_one
       };
-      axios
+      dug
         .post("/register", creds)
         .then(res => {
           console.log(res);
-          this.setState({ user: res.data });
+          this.setState({ user: res });
           console.log(this.state);
           this.toggleLogin();
         })
@@ -87,12 +88,12 @@ export class App extends React.Component<any, AppState> {
       email: this.state.email_input,
       password: this.state.password_input_one
     };
-    axios
+    dug
       .post("/login", creds)
       .then(res => {
         console.log(res);
-        if (res.data.email.length > 0 && res.data._id > -1) {
-          this.setState({ user: res.data, auth: true });
+        if (res.email.length > 0 && res._id > -1) {
+          this.setState({ user: res, auth: true });
           console.log(this.props);
           console.log(this.state);
           sessionStorage.setItem("user", JSON.stringify(this.state.user));

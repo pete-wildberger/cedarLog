@@ -1,5 +1,6 @@
 import * as React from "react";
-import axios from "axios";
+// import axios from "axios";
+import { dug } from '../dug';
 import { Link, withRouter } from "react-router-dom";
 
 interface state_type {
@@ -16,7 +17,7 @@ export class DashBoard extends React.Component {
 
   componentDidMount() {
     console.log("HELOOOO", this.props);
-    axios
+    dug
       .get("/api/scrap")
       .then(res => {
         console.log(res);
