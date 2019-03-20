@@ -97,6 +97,7 @@ export class App extends React.Component<any, AppState> {
 			});
 		this.clearLoginState();
 	};
+	logout: React.MouseEventHandler<HTMLLinkElement> = () => {};
 	componentDidMount() {
 		console.log('this.context', this.context);
 		console.log('this.props', this.props);
@@ -136,7 +137,7 @@ export class App extends React.Component<any, AppState> {
 		return (
 			<Router history={history}>
 				<div className="App">
-					<Header />
+					<Header logout={e => this.logout(e)} />
 					<div className="row view">
 						<div className="col-12">{outlet}</div>
 						<Switch>
@@ -144,14 +145,14 @@ export class App extends React.Component<any, AppState> {
 								exact
 								path="/dashboard"
 								auth={this.state.auth}
-								component={(props: any) => {
+								component={() => {
 									return <DashBoard auth={this.state.auth} user={this.state.user} />;
 								}}
 							/>
 							<PrivateRoute
 								path="/:user"
 								auth={this.state.auth}
-								component={(props: any) => {
+								component={() => {
 									return <User auth={this.state.auth} user={this.state.user} />;
 								}}
 							/>

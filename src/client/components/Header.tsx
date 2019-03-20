@@ -1,10 +1,17 @@
-import * as React from "react";
-import { SVG } from "./Logo";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import { SVG } from './Logo';
 
-export const Header = () => {
-  return (
-    <div className="head">
-      <SVG className="logo" name="logo" fill="#fff" />
-    </div>
-  );
+interface HeaderProps {
+	logout: React.MouseEventHandler<HTMLLinkElement>;
+}
+export const Header = (props: HeaderProps) => {
+	return (
+		<div className="head">
+			<SVG className="logo" name="logo" fill="#fff" />
+			<Link to="/" onClick={e => props.logout}>
+				Logout
+			</Link>
+		</div>
+	);
 };
