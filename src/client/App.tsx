@@ -18,20 +18,21 @@ interface AppState {
 	password_input_one?: string;
 	password_input_two?: string;
 }
+const defaultAppState: AppState = {
+	user: {
+		email: ''
+	},
+	email_input: '',
+	auth: false,
+	login: true,
+	password_input_one: '',
+	password_input_two: ''
+};
 
 export class App extends React.Component<any, AppState> {
 	constructor(props: any) {
 		super(props);
-		this.state = {
-			user: {
-				email: ''
-			},
-			email_input: '',
-			auth: false,
-			login: true,
-			password_input_one: '',
-			password_input_two: ''
-		};
+		this.state = defaultAppState;
 	}
 	clearLoginState = (): void => {
 		this.setState({
@@ -39,10 +40,6 @@ export class App extends React.Component<any, AppState> {
 			password_input_one: '',
 			password_input_two: ''
 		});
-	};
-	getUser = () => {
-		let user;
-		this.setState({ user });
 	};
 
 	handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
@@ -88,7 +85,6 @@ export class App extends React.Component<any, AppState> {
 					this.setState({ user: res, auth: true });
 					console.log(this.props);
 					console.log(this.state);
-					sessionStorage.setItem('user', JSON.stringify(this.state.user));
 					history.push('/dashboard');
 				}
 			})
@@ -97,7 +93,15 @@ export class App extends React.Component<any, AppState> {
 			});
 		this.clearLoginState();
 	};
-	logout: React.MouseEventHandler<HTMLLinkElement> = () => {};
+	logout = () => {
+		console.log('logout');
+		dug.get('/logout').then(res => {
+			console.log('logout');
+			this.setState({ ...defaultAppState });
+			console.log('this.setState', this.state);
+			history.push('/dashboard');
+		});
+	};
 	componentDidMount() {
 		console.log('this.context', this.context);
 		console.log('this.props', this.props);
@@ -131,13 +135,14 @@ export class App extends React.Component<any, AppState> {
 				/>
 			);
 		} else {
+			console.log('mistake', this.state);
 			outlet = <span />;
 		}
 
 		return (
 			<Router history={history}>
 				<div className="App">
-					<Header logout={e => this.logout(e)} />
+					<Header auth={this.state.auth} logout={() => this.logout()} />
 					<div className="row view">
 						<div className="col-12">{outlet}</div>
 						<Switch>
