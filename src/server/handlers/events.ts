@@ -12,7 +12,7 @@ import { scrapeEvents } from '../scraper/scraper';
 
 export class Events {
 	static getEvents(req: Request, res: Response) {
-		EventsModel.find_all().then((events: any[]) => {
+		EventsModel.find_all(`_id DESC`).then((events: any[]) => {
 			if (events.length > 0) {
 				res.status(200).send(events);
 			} else {
