@@ -6,7 +6,7 @@ import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
-import { Users, Events } from './handlers/';
+import { Users } from './handlers/';
 import { PassportInit } from './auth/passport';
 import api_routes from './api_routes';
 
@@ -44,7 +44,7 @@ class App {
 			req.session.destroy(() => {
 				req.logout();
 				res.clearCookie('user');
-				res.redirect('/');
+				res.status(200).send({ msg: 'Logged out!' });
 			});
 		});
 
