@@ -1,6 +1,7 @@
 import * as React from 'react';
 // import axios from "axios";
 import { dug } from '../dug';
+import { DashHead, DashRow } from './DashRow';
 import { Link, withRouter } from 'react-router-dom';
 
 interface IChildComponentProps extends React.Props<any> {
@@ -46,15 +47,25 @@ export class DashBoard extends React.Component<IChildComponentProps, state_type>
 		// 	});
 	}
 	render() {
-		return (
-			<div className="row">
-				<div className="col-3 menuTab">
-					<a href="">Shows</a>
+		if (this.state.events.length > 0) {
+			return (
+				<div className="row dash">
+					<div className="col-3 menuTab">
+						<a href="">Shows</a>
+					</div>
+					<div className="col-9 menuTab">
+						<input type="text" />
+						<div className="flex-table-row">
+							<DashHead {...this.state.events[0]} />
+							{this.state.events.map(event => {
+								return <DashRow key={event.id} {...event} />;
+							})}
+						</div>
+					</div>
 				</div>
-				<div className="col-9 menuTab">
-					<img className="center-img" src="https://media.giphy.com/media/26BRA7WJEcn7yJy3C/giphy.gif" alt="Loading" />
-				</div>
-			</div>
-		);
+			);
+		} else {
+			return <img className="center-img" src="https://media.giphy.com/media/26BRA7WJEcn7yJy3C/giphy.gif" alt="Loading" />;
+		}
 	}
 }

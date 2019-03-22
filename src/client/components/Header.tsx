@@ -8,7 +8,11 @@ interface HeaderProps {
 export const Header = (props: HeaderProps) => {
 	const logout = (auth: boolean) => {
 		if (auth) {
-			return <button onClick={props.logout}>Logout</button>;
+			return (
+				<button className="btn" onClick={props.logout}>
+					Logout
+				</button>
+			);
 		}
 	};
 	return (
