@@ -49,7 +49,6 @@ class App {
 		});
 
 		this.express.use('/api', Users.isLoggedIn, api_routes);
-		this.express.get('/events', Events.events);
 		this.express.get('*', (req: express.Request, res: express.Response) => {
 			res.sendFile(path.join(__dirname, 'index.html'));
 		});

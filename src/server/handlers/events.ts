@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UsersModel, EventsModel, UsersModel_type } from '../models';
-import { getEvents } from '../scraper/scraper';
+import { scrapeEvents } from '../scraper/scraper';
 // export interface TicketsHandler_type {
 // 	tm: TicketsModel_type;
 // 	QRCode: any;
@@ -11,8 +11,13 @@ import { getEvents } from '../scraper/scraper';
 // }
 
 export class Events {
-	static events(req: Request, res: Response) {
-		getEvents((data: any) => {
+	static getEvents(req: Request, res: Response) {
+		EventsModel.find_all().then(events => {
+			res.send(events);
+		});
+	}
+	static addEvents(req: Request, res: Response) {
+		scrapeEvents((data: any) => {
 			EventsModel.upsert(data);
 			console.log(data);
 			res.status(200).send(data);

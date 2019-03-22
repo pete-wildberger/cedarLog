@@ -13,7 +13,7 @@ function getHTML(options: any, callback: Function) {
 	});
 }
 
-export function getEvents(callback: Function) {
+export function scrapeEvents(callback: Function) {
 	const options: { [key: string]: any } = {
 		url: 'https://www.thecedar.org/listing/',
 		headers: {
@@ -25,11 +25,11 @@ export function getEvents(callback: Function) {
 		}
 	};
 	getHTML(options, (data: any) => {
-		callback(scrapeEvents(data));
+		callback(getData(data));
 	});
 }
 
-function scrapeEvents(html: any) {
+function getData(html: any) {
 	console.log('cedar');
 	let shows: Array<{ [key: string]: string }> = [];
 	let titles: string[] = [];

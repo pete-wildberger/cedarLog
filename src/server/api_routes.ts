@@ -13,7 +13,8 @@ class Router {
 		this.api.use(bodyParser.json());
 	}
 	private routes() {
-		this.api.route('/scrape').get(Events.events);
+		this.api.route('/events').get(Events.getEvents);
+		this.api.route('/scrape').get(Events.addEvents);
 	}
 }
 export default new Router().api;

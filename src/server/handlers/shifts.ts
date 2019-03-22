@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { UsersModel, EventsModel, UsersModel_type } from '../models';
-import { getEvents } from '../scraper/scraper';
 // export interface TicketsHandler_type {
 // 	tm: TicketsModel_type;
 // 	QRCode: any;
@@ -10,10 +9,6 @@ import { getEvents } from '../scraper/scraper';
 // 	create_many(req: Request, res: Response): any;
 // }
 
-class ShiftsHandler {
-	public um: UsersModel_type;
-	constructor() {
-		this.um = UsersModel;
-	}
+export class Shifts {
+	static getShifts(req: Request, res: Response) {}
 }
-export const Shifts = new ShiftsHandler();
