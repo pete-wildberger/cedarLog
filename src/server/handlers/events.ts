@@ -12,15 +12,18 @@ import { scrapeEvents } from '../scraper/scraper';
 
 export class Events {
 	static getEvents(req: Request, res: Response) {
-		EventsModel.find_all().then(events => {
-			res.send(events);
+		EventsModel.find_all().then((events: any[]) => {
+			if (events.length > 0) {
+				res.status(200).send(events);
+			} else {
+				res.sendStatus(418);
+			}
 		});
 	}
 	static addEvents(req: Request, res: Response) {
 		scrapeEvents((data: any) => {
 			EventsModel.upsert(data);
-			console.log(data);
-			res.status(200).send(data);
+			res.status(200).send('data');
 		});
 	}
 }

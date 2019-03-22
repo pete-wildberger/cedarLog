@@ -26,17 +26,24 @@ export class DashBoard extends React.Component<IChildComponentProps, state_type>
 
 	componentDidMount() {
 		console.log('HELOOOO', this.props, this.state);
-		dug.get('/api/events').then(events => {
-			this.setState({ events });
-		});
 		dug
-			.get('/api/scrap')
-			.then(res => {
-				console.log(res);
+			.get('/api/events')
+			.then(events => {
+				console.log('res', events);
+				this.setState({ events });
+				console.log(this.state);
 			})
 			.catch(err => {
 				console.log(err);
 			});
+		// dug
+		// 	.get('/api/scrape')
+		// 	.then(res => {
+		// 		console.log(res);
+		// 	})
+		// 	.catch(err => {
+		// 		console.log(err);
+		// 	});
 	}
 	render() {
 		return (

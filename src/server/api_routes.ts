@@ -13,7 +13,9 @@ class Router {
 		this.api.use(bodyParser.json());
 	}
 	private routes() {
-		this.api.route('/events').get(Events.getEvents);
+		const events = express.Router();
+		events.get('/', Events.getEvents);
+		this.api.use('/events', events);
 		this.api.route('/scrape').get(Events.addEvents);
 	}
 }

@@ -16,7 +16,7 @@ export class Users {
 	}
 	static isLoggedIn(req: Request, res: Response, next: NextFunction) {
 		if (req.isAuthenticated()) {
-			console.log('isLoggedIn', req);
+			console.log('authed');
 			next();
 		} else {
 			console.log('nope');
@@ -31,7 +31,6 @@ export class Users {
 		});
 	}
 	static register = (req: Request, res: Response) => {
-		console.log(req.body.password);
 		bcrypt.hash(req.body.password, +process.env.SALT, (err, hash) => {
 			if (err) {
 				console.log('Error hashing password', err);
@@ -49,7 +48,6 @@ export class Users {
 							console.log('err', err);
 							res.status(400).send('unable to authenticate.');
 						} else {
-							console.log('newUser', data);
 							data.auth = req.isAuthenticated();
 							res.status(201).send(data);
 						}

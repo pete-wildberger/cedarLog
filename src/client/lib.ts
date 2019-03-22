@@ -10,14 +10,7 @@ export class Dug {
 		options.method = 'GET';
 		return fetch(url, options) // body data type must match "Content-Type" header
 			.then(this.errorHandler)
-			.then(response => {
-				console.log(response);
-				response.json();
-			}); // parses response to JSON
-		// .then(body => {
-		// 	console.log(body);
-		// 	JSON.parse(body);
-		// });
+			.then(response => response.json()); // parses response to JSON
 	};
 	post = (url: string, data: { [key: string]: any }): Promise<any> => {
 		let options: RequestInit = { ...this.config };
