@@ -1,12 +1,12 @@
 import * as pg from 'pg';
-import { Model, model_type } from './lib/model.class';
+import { Model } from 'dbaser';
 import { pool } from './connection';
 
-export interface EventsModel_type extends Model<model_type> {
+export interface EventsModel_type extends Model {
 	find_by_email(email: string): any;
 }
 
-class Events extends Model<model_type> {
+class Events extends Model {
 	constructor(pool: pg.Pool, table: string) {
 		super(pool, table);
 		this.table = table;
@@ -40,4 +40,5 @@ class Events extends Model<model_type> {
 		return this.request(query, values);
 	}
 }
+
 export const EventsModel = new Events(pool, 'events');

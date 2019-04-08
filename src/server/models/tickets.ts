@@ -1,14 +1,15 @@
 import * as pg from 'pg';
-import { Model, model_type } from './lib/model.class';
+// import { Model, model_type } from './lib/model.class';
+import { Model } from 'dbaser';
 import { pool } from './connection';
 
-export interface TicketsModel_type extends Model<model_type> {
+export interface TicketsModel_type extends Model {
 	newObj(): any;
 	remove(id: number): any;
 	newObjs(): any;
 }
 
-class Tickets extends Model<model_type> {
+class Tickets extends Model {
 	constructor(pool: pg.Pool, table: string) {
 		super(pool, table);
 		this.table = table;
