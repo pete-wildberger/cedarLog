@@ -6,9 +6,9 @@ import history from './history';
 import { DashBoard, Footer, Header, Login, PrivateRoute, Register, User } from './components/';
 // https://tylermcginnis.com/react-router-protected-routes-authentication/
 
-const FourOhFour = () => {
+function FourOhFour(): JSX.Element {
 	return <h1>Oh no 404</h1>;
-};
+}
 
 interface AppState {
 	user?: { [key: string]: any };
@@ -112,24 +112,26 @@ export class App extends React.Component<any, AppState> {
 		});
 	};
 	render() {
-		console.log('email', this.state.user.email.length);
+		const { auth, email_input, login, user, password_input_one, password_input_two } = this.state;
+		const eLen: number = user.email.length;
 		let outlet: JSX.Element;
-		if (this.state.login && this.state.user.email.length === 0) {
+
+		if (login && eLen === 0) {
 			outlet = (
 				<Login
-					email_input={this.state.email_input}
-					password_input_one={this.state.password_input_one}
+					email_input={email_input}
+					password_input_one={password_input_one}
 					handleInputChange={e => this.handleInputChange(e)}
 					login={e => this.login(e)}
 					toggleLogin={() => this.toggleLogin()}
 				/>
 			);
-		} else if (!this.state.login && this.state.user.email.length === 0) {
+		} else if (!login && eLen === 0) {
 			outlet = (
 				<Register
-					email_input={this.state.email_input}
-					password_input_one={this.state.password_input_one}
-					password_input_two={this.state.password_input_two}
+					email_input={email_input}
+					password_input_one={password_input_one}
+					password_input_two={password_input_two}
 					handleInputChange={e => this.handleInputChange(e)}
 					handleRegister={e => this.handleRegister(e)}
 				/>
@@ -138,27 +140,26 @@ export class App extends React.Component<any, AppState> {
 			console.log('mistake', this.state);
 			outlet = <span />;
 		}
-
 		return (
 			<Router history={history}>
 				<div className="App">
-					<Header auth={this.state.auth} logout={() => this.logout()} />
+					<Header auth={auth} logout={() => this.logout()} />
 					<div className="row view">
 						<div className="col-12">{outlet}</div>
 						<Switch>
 							<PrivateRoute
 								exact
 								path="/dashboard"
-								auth={this.state.auth}
+								auth={auth}
 								component={() => {
-									return <DashBoard auth={this.state.auth} user={this.state.user} />;
+									return <DashBoard auth={auth} user={user} />;
 								}}
 							/>
 							<PrivateRoute
 								path="/:user"
-								auth={this.state.auth}
+								auth={auth}
 								component={() => {
-									return <User auth={this.state.auth} user={this.state.user} />;
+									return <User auth={auth} user={user} />;
 								}}
 							/>
 						</Switch>
